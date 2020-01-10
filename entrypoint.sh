@@ -62,6 +62,11 @@ else
 
 	# "Export" a cleaned copy to a temp directory
 	TMP_DIR="/github/archivetmp"
+
+	# Remove the folder
+	rm -rf "$TMP_DIR"
+
+	# Create new folder
 	mkdir "$TMP_DIR"
 
 	git config --global user.email "10upbot+github@10up.com"
@@ -90,7 +95,7 @@ else
 
 	# Copy from clean copy to /trunk, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc "$TMP_DIR/" trunk/ --delete
+	rsync -rc "$GITHUB_WORKSPACE/$TMP_DIR/" trunk/ --delete
 fi
 
 # Copy dotorg assets to /assets
@@ -104,7 +109,7 @@ fi
 # The force flag ensures we recurse into subdirectories even if they are already added
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
-svn add ./dist > /dev/null
+svn add . --force > /dev/null
 
 # SVN delete all deleted files
 # Also suppress stdout here
