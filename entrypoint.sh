@@ -84,6 +84,7 @@ else
 
 	# This will exclude everything in the .gitattributes file with the export-ignore flag
 	git archive HEAD ./dist | tar x --directory="$TMP_DIR"
+	cp -r dist/. "$TMP_DIR/"
 
 	cd "$SVN_DIR"
 
