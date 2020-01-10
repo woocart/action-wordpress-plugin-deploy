@@ -104,7 +104,7 @@ fi
 # The force flag ensures we recurse into subdirectories even if they are already added
 # Suppress stdout in favor of svn status later for readability
 echo "➤ Preparing files..."
-svn add . --force > /dev/null
+svn add ./dist --force > /dev/null
 
 # SVN delete all deleted files
 # Also suppress stdout here
