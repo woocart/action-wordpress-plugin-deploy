@@ -83,7 +83,7 @@ else
 	fi
 
 	# This will exclude everything in the .gitattributes file with the export-ignore flag
-	git archive HEAD | tar x --directory="$TMP_DIR"
+	git archive HEAD ./dist | tar x --directory="$TMP_DIR"
 
 	cd "$SVN_DIR"
 
