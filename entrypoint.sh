@@ -26,9 +26,15 @@ echo "ℹ︎ SLUG is $SLUG"
 
 # Does it even make sense for VERSION to be editable in a workflow definition?
 if [[ -z "$VERSION" ]]; then
-	VERSION=${GITHUB_REF#refs/tags/}
+	VERSION="${GITHUB_REF#refs/tags/}"
+	VERSION="${VERSION#v}"
 fi
 echo "ℹ︎ VERSION is $VERSION"
+
+if [[ -z "$ASSETS_DIR" ]]; then
+	ASSETS_DIR=".wordpress-org"
+fi
+echo "ℹ︎ ASSETS_DIR is $ASSETS_DIR"
 
 SVN_URL="http://plugins.svn.wordpress.org/${SLUG}/"
 SVN_DIR="/github/svn-${SLUG}"
@@ -46,6 +52,13 @@ echo "➤ Copying files..."
 # Copy from the `src folder of the`current branch to /trunk
 # The --delete flag will delete anything in destination that no longer exists in source
 rsync -r "$GITHUB_WORKSPACE/dist/" trunk/ --delete
+
+# Copy dotorg assets to /assets
+if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
+	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
+else
+	echo "ℹ︎ No assets directory found; skipping asset copy"
+fi
 
 # Add everything and commit to SVN
 # The force flag ensures we recurse into subdirectories even if they are already added
